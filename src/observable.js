@@ -58,20 +58,88 @@ var Observable = (function(){
 		 * @param [delegate]	{object}	Signal delegate 
 		 * handle onNext, onError and onComplete events
 		 * @end
+		 *
+		 * @return {object} The subscription delegate
+		 *
+		 * @throws error if the signal is not defined in this 
+		 * objects observable signals.
+		 * @end
 		 */
 		target.subscribe = function(signal, delegate){
-			_checkSignal(target, signal);
+			_checkTarget(this);
+			_checkSignal(this, signal);
 			
 			// If we get here then the signal is valid
 			delegate = delegate || {};
-			_addSub(target, signal, delegate);		
+			_addSub(this, signal, delegate);
+
+			return delegate;
 		};
+
+		/**
+		 * Unsubscribes the given delegate from this observable.
+		 * Returns if the delegate was removed or not (i.e. if
+		 * it existed in the first place).
+		 *
+		 * @param {object} The delegate object to unsubscribe
+		 *
+		 * @return {boolean} If the delegate was removed
+		 *
+		 * @throws error if this object is not observable
+		 */
+		target.unsubscribe = function(delegate){
+			var index;
+			_checkTarget(this);
+
+			for(var key in this._subs){
+				if(this._subs.hasOwnProperty(key)){
+					index = this._subs[key].indexOf(delegate);
+					if(index >= 0){
+						this._subs.splice(index, 1);
+						return true;
+					}
+				}
+			}
+			return false;
+		};
+
+		
 
 	};
 
 	/* private */
 	
 	
+	/**
+	 * Checks if the given target is observable or not
+	 *
+	 * @param target {object} Object to examine
+	 *
+	 * @return {boolean} If the target is observable 
+	 * @private
+	 */
+	function _isObs(target){
+		return 
+			target			!== undefined && 
+			target._signals !== undefined &&
+			target._subs	!== undefined;
+	}
+
+	/**
+	 * Checks if the target is observable and if not
+	 * then throws an error
+	 *
+	 * @param target {object} The object to check
+	 *
+	 * @throws error if the target is not observable
+	 * @private
+	 */
+	function _checkTarget(target){
+		if(!_isObs(target){
+			throw 'Target object is not observable';	
+		}
+	}
+
 	/**
 	 * Ensures that the observation specified is within
 	 * the targets signal set
@@ -80,12 +148,10 @@ var Observable = (function(){
 	 * @param signal {string} Signal to validate
 	 *
 	 * @throws error if the target will not accept the signal
+	 * @private
 	 */
 	function _checkSignal(target, signal){
-		if(target === undefined || target._signals === undefined){
-			throw 'Target object is not observable';
-		}
-		else if('string' === typeof signal){
+		if('string' === typeof signal){
 			throw 'Signal must be a string';
 		}
 		else if(target._signals.length > 0 && target._signals.indexOf(signal) === -1){
@@ -101,6 +167,8 @@ var Observable = (function(){
 	 * @param target	{object}	Observable target
 	 * @param signal	{string}	Observable signal
 	 * @param delegate	{object}	Signal delegate
+	 *
+	 * @private
 	 */
 	function _addSub(target, signal, delegate){
 		target._subs[signal] = target._subs[signal] ? target._subs[signal].push(delegate) : [delegate];
