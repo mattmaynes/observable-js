@@ -1,0 +1,12 @@
+# Hidden Files
+.*
+
+# Autosaves
+*~
+\#*\#
+
+# Binary files
+*.o
+
+# Output
+bin
