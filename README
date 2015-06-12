@@ -83,11 +83,11 @@ object sends a signal with the event data.
 	Foo.prototype.onUserInput = function(event){
 		if(isValid(event.value)){
 			// Signal that the next data has occured and send the data object
-			this.signal(Observable.Next, 'data', { message : event.value });
+			this.signal(Observable.NEXT, 'data', { message : event.value });
 		}
 		else{
 			// In this case our data is invalid so there is an error
-			this.signal(Observable.Error, 'data', { message : event.value });
+			this.signal(Observable.ERROR, 'data', { message : event.value });
 		}
 	};
 ```
