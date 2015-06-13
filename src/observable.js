@@ -4,14 +4,16 @@ var Observable = (function(){
 	/**
 	 * This is the observable object. Observable follows a 
 	 * singleton pattern so this object represents the public
-	 * API of Observable.
+	 * API of Observable. There are 3 defined event streams
+	 * for each available signal. Those streams are defined
+	 * here.
 	 *
 	 * @type {object}
 	 */
 	var self = {
-		NEXT		: 'NEXT',
-		ERROR		: 'ERROR',
-		COMPLETE	: 'COMPLETE'
+		NEXT		: 'onNext',
+		ERROR		: 'onError',
+		COMPLETE	: 'onComplete'
 	};
 
 	/* public */
@@ -70,10 +72,7 @@ var Observable = (function(){
 			_checkSignal(this, signal);
 			
 			// If we get here then the signal is valid
-			delegate = delegate || {};
-			_addSub(this, signal, delegate);
-
-			return delegate;
+			return _addSub(this, signal, delegate || {});
 		};
 
 		/**
@@ -103,7 +102,32 @@ var Observable = (function(){
 			return false;
 		};
 
-		
+		/**
+		 * Sends a signal to all listeners for the given stream
+		 * and observation.
+		 *
+		 * @param stream	{string} Signal stream (i.e. NEXT)
+		 * @param observe	{string} Observation identifier
+		 * @param [data]	{object} A data object to pass to 
+		 * any delegate functions. The structure of this object
+		 * arbitrary.
+		 * @end
+		 * 
+		 *
+		 * @throws error if the observation is not defined
+		 * for this observable object.
+		 * @end
+		 *
+		 * @example
+		 * this.signal(Observable.NEXT, 'data' { message : 'Hello, World!'});
+		 * @end
+		 *
+		 */
+		target.signal = function(stream, observe, data){
+			_checkTarget(this);
+			_checkSignal(this, observe);
+			_signal(this, stream, observe, data || {});
+		};
 
 	};
 
@@ -155,7 +179,7 @@ var Observable = (function(){
 			throw 'Signal must be a string';
 		}
 		else if(target._signals.length > 0 && target._signals.indexOf(signal) === -1){
-			throw 'Invalid subscription signal: ' + signal;
+			throw 'Invalid signal: ' + signal + '. Signal not defined by observable target';
 		}
 	}
 
@@ -168,10 +192,44 @@ var Observable = (function(){
 	 * @param signal	{string}	Observable signal
 	 * @param delegate	{object}	Signal delegate
 	 *
+	 * @return {object} The delegate object
 	 * @private
 	 */
 	function _addSub(target, signal, delegate){
 		target._subs[signal] = target._subs[signal] ? target._subs[signal].push(delegate) : [delegate];
+		return delegate;
+	}
+	
+	/**
+	 * Signals the delegates of the target object on 
+	 * the given event stream.
+	 *
+	 * @param target	{object}	Observable target
+	 * @param stream	{string}	Signal stream
+	 * @param signal	{string}	Observable signal
+	 * @param data		{object}	Signal data
+	 * 
+	 * @private
+	 */
+	function _signal(target, stream, signal, data){
+		var delegates = target._subs[signal] || [];
+		delegates.forEach(_emitSync.bind(stream, data);
+	}
+
+	/**
+	 * Emits a single synchronous event on the given 
+	 * event stream sending the defined data object
+	 * 
+	 * @param stream	{string}	Signal stream
+	 * @param data		{object}	Signal data
+	 * @param delegate	{object}	Delegate target
+	 *
+	 */
+	function _emitSync(stream, data, delegate){
+		listener = delegate[stream];
+		if('function' === typeof listener){
+			listener(data);
+		}
 	}
 
 	return self;
