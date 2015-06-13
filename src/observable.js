@@ -2,11 +2,9 @@ var Observable = (function(){
 	'use strict';
 	
 	/**
-	 * This is the observable object. Observable follows a 
-	 * singleton pattern so this object represents the public
-	 * API of Observable. There are 3 defined event streams
-	 * for each available signal. Those streams are defined
-	 * here.
+	 * This is the observable object. Observable follows a singleton pattern 
+	 * so this object represents the public API of Observable. There are 3 
+	 * defined event streams for each available signal.
 	 *
 	 * @type {object}
 	 */
@@ -19,16 +17,14 @@ var Observable = (function(){
 	/* public */
 
 	/**
-	 * Makes the target object observable. This adds the observable
-	 * functions to the target and allows other objects to listen
-	 * to it.
+	 * Makes the target object observable. This adds the observable functions 
+	 * to the target and allows other objects to listen to it.
 	 *
 	 * @param target	{object}	The object to make observable
-	 * @param [events]	{Array}		An explicit definition of the
-	 * events that the target will offer. If these are specified
-	 * and a subscriber tries to listen to an undefined event
-	 * then an error will be thrown. If this is not defined then
-	 * subscribers can listen to any arbitrary event
+	 * @param [events]	{Array}		An explicit definition of the events that 
+	 * the target will offer. If these are specified and a subscriber tries to 
+	 * listen to an undefined event then an error will be thrown. If this is 
+	 * not defined then subscribers can listen to any arbitrary event
 	 * @end
 	 *
 	 * @return {object} The new observable object
@@ -36,37 +32,35 @@ var Observable = (function(){
 	self.create = function (target, events){
 		
 		/**
-		 * The target maintains its own state. This holds all of
-		 * the subscribers observing the target.
+		 * The target maintains its own state. This holds all of the 
+		 * subscribers observing the target.
 		 * 
 		 * @type {object}
  		 */
 		target._subs = {};
 
 		/**
-		 * Maintains all of the signals for this target. This is 
-		 * used for validation of subscriptions. If no event 
-		 * filtering is used for this observable then this 
-		 * object is ignored
+		 * Maintains all of the signals for this target. This is used for 
+		 * validation of subscriptions. If no event filtering is used for this 
+		 * observable then this object is ignored
 		 *
 		 * @type {Array}
 		 */
 		target._signals = [];
 
 		/**
-		 * Subscribes the given delegate to the signal specified.
-		 * The delegate object is returned and can be modified 
-		 * at a later time.
+		 * Subscribes the given delegate to the signal specified. The delegate
+		 * object is returned and can be modified at a later time.
 		 *
 		 * @param signal		{string}	Signal to observe
-		 * @param [delegate]	{object}	Signal delegate 
-		 * handle onNext, onError and onComplete events
+		 * @param [delegate]	{object}	Signal delegate handle onNext, 
+		 * onError and onComplete events
 		 * @end
 		 *
 		 * @return {object} The subscription delegate
 		 *
-		 * @throws error if the signal is not defined in this 
-		 * objects observable signals.
+		 * @throws error if the signal is not defined in this objects 
+		 * observable signals.
 		 * @end
 		 */
 		target.subscribe = function(signal, delegate){
@@ -78,9 +72,8 @@ var Observable = (function(){
 		};
 
 		/**
-		 * Unsubscribes the given delegate from this observable.
-		 * Returns if the delegate was removed or not (i.e. if
-		 * it existed in the first place).
+		 * Unsubscribes the given delegate from this observable. Returns if the
+		 * delegate was removed or not (i.e. if it existed in the first place).
 		 *
 		 * @param {object} The delegate object to unsubscribe
 		 *
@@ -105,20 +98,16 @@ var Observable = (function(){
 		};
 
 		/**
-		 * Sends a signal to all listeners for the given stream
-		 * and observation.
+		 * Sends a signal to all listeners for the given stream and observation
 		 *
 		 * @param stream	{string} Signal stream (i.e. NEXT)
 		 * @param observe	{string} Observation identifier
-		 * @param [data]	{object} A data object to pass to 
-		 * any delegate functions. The structure of this object
-		 * arbitrary.
+		 * @param [data]	{object} A data object to pass to any delegate 
+		 * functions. The structure of this object arbitrary
 		 * @end
 		 * 
 		 *
-		 * @throws error if the observation is not defined
-		 * for this observable object.
-		 * @end
+		 * @throws error if the observation is not defined for this observable 
 		 *
 		 * @example
 		 * this.signal(Observable.NEXT, 'data' { message : 'Hello, World!'});
@@ -153,8 +142,7 @@ var Observable = (function(){
 	}
 
 	/**
-	 * Checks if the target is observable and if not
-	 * then throws an error
+	 * Checks if the target is observable and if not then throws an error
 	 *
 	 * @param target {object} The object to check
 	 *
@@ -168,8 +156,7 @@ var Observable = (function(){
 	}
 
 	/**
-	 * Ensures that the observation specified is within
-	 * the targets signal set
+	 * Ensures that the observation specified is within the targets signal set
 	 * 
 	 * @param target {object} Validation source
 	 * @param signal {string} Signal to validate
@@ -187,9 +174,8 @@ var Observable = (function(){
 	}
 
 	/**
-	 * Adds a subscription to the target object. If there 
-	 * is no existing subscription for the given signal 
-	 * then one is added
+	 * Adds a subscription to the target object. If there is no existing 
+	 * subscription for the given signal then one is added
 	 * 
 	 * @param target	{object}	Observable target
 	 * @param signal	{string}	Observable signal
@@ -204,8 +190,7 @@ var Observable = (function(){
 	}
 	
 	/**
-	 * Signals the delegates of the target object on 
-	 * the given event stream.
+	 * Signals the delegates of the target object on the given event stream
 	 *
 	 * @param target	{object}	Observable target
 	 * @param stream	{string}	Signal stream
@@ -220,13 +205,14 @@ var Observable = (function(){
 	}
 
 	/**
-	 * Emits a single synchronous event on the given 
-	 * event stream sending the defined data object
+	 * Emits a single synchronous event on the given event stream sending the 
+	 * defined data object
 	 * 
 	 * @param stream	{string}	Signal stream
 	 * @param data		{object}	Signal data
 	 * @param delegate	{object}	Delegate target
 	 *
+	 * @private
 	 */
 	function _emitSync(stream, data, delegate){
 		listener = delegate[stream];
