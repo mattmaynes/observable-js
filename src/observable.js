@@ -30,6 +30,8 @@ var Observable = (function(){
 	 * then an error will be thrown. If this is not defined then
 	 * subscribers can listen to any arbitrary event
 	 * @end
+	 *
+	 * @return {object} The new observable object
 	 */
 	self.create = function (target, events){
 		
@@ -129,6 +131,7 @@ var Observable = (function(){
 			_signal(this, stream, observe, data || {});
 		};
 
+		return target;
 	};
 
 	/* private */
