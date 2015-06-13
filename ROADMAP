@@ -1,0 +1,7 @@
+#Road Map
+
+###Asynchronous singals
+Each signal should have the option to be synchronous or asynchronous. Async
+signal ordering is not guarenteed and therefore should not be the default
+option. However, in a versioned or orderless system then this is not an 
+issue and message should be asynchronous. 
