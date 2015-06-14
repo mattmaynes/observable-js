@@ -1,0 +1,15 @@
+#TODO
+- Add asynchronous signal emitting.
+- Create test suite
+	- Find test driver
+	- Determine how to test internal functions
+- Unsubscribe is currently an O(n*m) operation. It can be made O(n) if each
+	delegate stores its state. The pros and cons need to be considered here
+	(i.e. does this break normaization). 
+- Add method for dynamically declaring signals (register)
+- Add state to signals. This will require changing them from strings into 
+	objects. Each key in the signals object will be the identifier. Each
+	signal will have the option to be sync or async. There may be more options
+	in the future.
+- Add working examples of observable code.
+- Add performance profile to determine overhead of observable-js
