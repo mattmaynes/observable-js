@@ -135,8 +135,7 @@ var Observable = (function(){
 	 * @private
 	 */
 	function _isObs(target){
-		return 
-			target			!== undefined && 
+		return target		!== undefined && 
 			target._signals !== undefined &&
 			target._subs	!== undefined;
 	}
@@ -150,7 +149,7 @@ var Observable = (function(){
 	 * @private
 	 */
 	function _checkTarget(target){
-		if(!_isObs(target){
+		if(!_isObs(target)){
 			throw 'Target object is not observable';	
 		}
 	}
@@ -201,7 +200,7 @@ var Observable = (function(){
 	 */
 	function _signal(target, stream, signal, data){
 		var delegates = target._subs[signal] || [];
-		delegates.forEach(_emitSync.bind(stream, data);
+		delegates.forEach(_emitSync.bind(stream, data));
 	}
 
 	/**
