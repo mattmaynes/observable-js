@@ -164,7 +164,7 @@ var Observable = (function(){
 	 * @private
 	 */
 	function _checkSignal(target, signal){
-		if('string' === typeof signal){
+		if('string' !== typeof signal){
 			throw 'Signal must be a string';
 		}
 		else if(target._signals.length > 0 && target._signals.indexOf(signal) === -1){
@@ -200,7 +200,9 @@ var Observable = (function(){
 	 */
 	function _signal(target, stream, signal, data){
 		var delegates = target._subs[signal] || [];
-		delegates.forEach(_emitSync.bind(stream, data));
+		delegates.forEach(function(delegate){
+			_emitSync(stream, data, delegate);		
+		});
 	}
 
 	/**
@@ -214,7 +216,7 @@ var Observable = (function(){
 	 * @private
 	 */
 	function _emitSync(stream, data, delegate){
-		listener = delegate[stream];
+		var listener = delegate[stream];
 		if('function' === typeof listener){
 			listener(data);
 		}
