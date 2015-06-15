@@ -86,12 +86,10 @@ var Observable = (function(){
 			_checkTarget(this);
 
 			for(var key in this._subs){
-				if(this._subs.hasOwnProperty(key)){
-					index = this._subs[key].indexOf(delegate);
-					if(index >= 0){
-						this._subs.splice(index, 1);
-						return true;
-					}
+				index = this._subs[key].indexOf(delegate);
+				if(index >= 0){
+					this._subs[key].splice(index, 1);
+					return true;
 				}
 			}
 			return false;
@@ -184,7 +182,11 @@ var Observable = (function(){
 	 * @private
 	 */
 	function _addSub(target, signal, delegate){
-		target._subs[signal] = target._subs[signal] ? target._subs[signal].push(delegate) : [delegate];
+		if(target._subs[signal]){
+			 target._subs[signal].push(delegate) 
+		}else{
+			target._subs[signal]=[delegate];
+		}
 		return delegate;
 	}
 	
