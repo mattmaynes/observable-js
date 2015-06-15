@@ -69,4 +69,27 @@ describe('Observable-JS', function(){
 		expect(count).toBe(0);
 	});
 
+	it('Tests unsubscribing from an observer before subscribing', function(){
+		expect(clock.unsubscribe({})).toBeFalsy();
+		expect(clock.unsubscribe()).toBeTruthy();
+	});
+
+	it('Tests expected errors from an observer', function(){
+		var source = Observable.create({}, ['data']);
+		var delegate = {};
+
+		expect(function(){return source.subscribe('fail');}).toThrow();
+		expect(function(){return source.subscribe(123);}).toThrow();
+		
+		// By removing the subscribers from the source it is not considered
+		// a source object any more
+		var sigs = source['_signals'];
+		delete source['_signals'];
+		
+		expect(function(){return source.subscribe('data');}).toThrow();
+		source['_signals'] = sigs;
+		expect(source.subscribe('data', delegate)).toEqual(delegate);
+
+	});
+
 });

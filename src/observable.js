@@ -20,8 +20,8 @@ var Observable = (function(){
 	 * Makes the target object observable. This adds the observable functions 
 	 * to the target and allows other objects to listen to it.
 	 *
-	 * @param target	{object}	The object to make observable
-	 * @param [events]	{Array}		An explicit definition of the events that 
+	 * @param [target]	{object}	The object to make observable
+	 * @param [signals]	{Array}		An explicit definition of the events that 
 	 * the target will offer. If these are specified and a subscriber tries to 
 	 * listen to an undefined event then an error will be thrown. If this is 
 	 * not defined then subscribers can listen to any arbitrary event
@@ -29,8 +29,9 @@ var Observable = (function(){
 	 *
 	 * @return {object} The new observable object
 	 */
-	self.create = function (target, events){
-		
+	self.create = function (target, signals){
+		target = target || {};
+
 		/**
 		 * The target maintains its own state. This holds all of the 
 		 * subscribers observing the target.
@@ -46,7 +47,7 @@ var Observable = (function(){
 		 *
 		 * @type {Array}
 		 */
-		target._signals = [];
+		target._signals = signals || [];
 
 		/**
 		 * Subscribes the given delegate to the signal specified. The delegate
@@ -74,8 +75,9 @@ var Observable = (function(){
 		/**
 		 * Unsubscribes the given delegate from this observable. Returns if the
 		 * delegate was removed or not (i.e. if it existed in the first place).
+		 * If no delegate is provided then all delegates are unsubscribed
 		 *
-		 * @param {object} The delegate object to unsubscribe
+		 * @param [delegate] {object} The delegate object to unsubscribe
 		 *
 		 * @return {boolean} If the delegate was removed
 		 *
@@ -84,6 +86,11 @@ var Observable = (function(){
 		target.unsubscribe = function(delegate){
 			var index;
 			_checkTarget(this);
+
+			if(!delegate){
+				this._subs = {};
+				return true;
+			}
 
 			for(var key in this._subs){
 				index = this._subs[key].indexOf(delegate);
@@ -148,7 +155,7 @@ var Observable = (function(){
 	 */
 	function _checkTarget(target){
 		if(!_isObs(target)){
-			throw 'Target object is not observable';	
+			throw new Error('Target object is not observable');	
 		}
 	}
 
@@ -163,10 +170,10 @@ var Observable = (function(){
 	 */
 	function _checkSignal(target, signal){
 		if('string' !== typeof signal){
-			throw 'Signal must be a string';
+			throw new Error('Signal must be a string');
 		}
 		else if(target._signals.length > 0 && target._signals.indexOf(signal) === -1){
-			throw 'Invalid signal: ' + signal + '. Signal not defined by observable target';
+			throw new Error('Invalid signal: ' + signal + '. Signal not defined by observable target');
 		}
 	}
 
@@ -183,9 +190,10 @@ var Observable = (function(){
 	 */
 	function _addSub(target, signal, delegate){
 		if(target._subs[signal]){
-			 target._subs[signal].push(delegate);
-		}else{
-			target._subs[signal]=[delegate];
+			target._subs[signal].push(delegate);
+		}
+		else {
+			target._subs[signal] = [delegate];
 		}
 		return delegate;
 	}
