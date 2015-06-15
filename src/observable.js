@@ -183,7 +183,7 @@ var Observable = (function(){
 	 */
 	function _addSub(target, signal, delegate){
 		if(target._subs[signal]){
-			 target._subs[signal].push(delegate) 
+			 target._subs[signal].push(delegate);
 		}else{
 			target._subs[signal]=[delegate];
 		}
