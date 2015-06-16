@@ -94,6 +94,7 @@ var Observable = (function(){
 			if(!delegate._signals)
 				return false;
 			for(var key in delegate._signals){
+				key=delegate._signals[key]
 				index = this._subs[key].indexOf(delegate);
 				if(index >= 0){
 					this._subs[key].splice(index, 1);
