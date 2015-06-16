@@ -13,8 +13,7 @@ module.exports = function(config){
 			'karma-phantomjs-launcher'
 		],
 		browsers		: ['PhantomJS'],
-		reporters		: [
-			'progress', 
+		reporters		: [ 
 			'nested', 
 			'coverage'
 		],

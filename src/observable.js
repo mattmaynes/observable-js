@@ -21,10 +21,8 @@ var Observable = (function(){
 	 * to the target and allows other objects to listen to it.
 	 *
 	 * @param [target]	{object}	The object to make observable
-	 * @param [signals]	{Array}		An explicit definition of the events that 
-	 * the target will offer. If these are specified and a subscriber tries to 
-	 * listen to an undefined event then an error will be thrown. If this is 
-	 * not defined then subscribers can listen to any arbitrary event
+	 * @param [signals]	{object}	An explicit definition of the events that 
+	 * the target will offer. Each signal can have individual properties.
 	 * @end
 	 *
 	 * @return {object} The new observable object
@@ -41,13 +39,12 @@ var Observable = (function(){
 		target._subs = {};
 
 		/**
-		 * Maintains all of the signals for this target. This is used for 
-		 * validation of subscriptions. If no event filtering is used for this 
-		 * observable then this object is ignored
+		 * Maintains all of the signals for this target and any properties
+		 * associated with each signal.
 		 *
-		 * @type {Array}
+		 * @type {object}
 		 */
-		target._signals = signals || [];
+		target._signals = signals || {};
 
 		/**
 		 * Subscribes the given delegate to the signal specified. The delegate
@@ -106,23 +103,26 @@ var Observable = (function(){
 		 * Sends a signal to all listeners for the given stream and observation
 		 *
 		 * @param stream	{string} Signal stream (i.e. NEXT)
-		 * @param observe	{string} Observation identifier
+		 * @param signal	{string} Observation identifier
 		 * @param [data]	{object} A data object to pass to any delegate 
 		 * functions. The structure of this object arbitrary
 		 * @end
 		 * 
 		 *
-		 * @throws error if the observation is not defined for this observable 
+		 * @throws error if signal is not a string
 		 *
 		 * @example
 		 * this.signal(Observable.NEXT, 'data' { message : 'Hello, World!'});
 		 * @end
 		 *
 		 */
-		target.signal = function(stream, observe, data){
+		target.signal = function(stream, signal, data){
 			_checkTarget(this);
-			_checkSignal(this, observe);
-			_signal(this, stream, observe, data || {});
+			_checkSignal(this, signal);
+
+			// Ensure that the signal exist before emitting it
+			this._signals[signal] = this._signals[signal] || {};
+			_signal(this, stream, signal, data || {});
 		};
 
 		return target;
@@ -172,9 +172,6 @@ var Observable = (function(){
 		if('string' !== typeof signal){
 			throw new Error('Signal must be a string');
 		}
-		else if(target._signals.length > 0 && target._signals.indexOf(signal) === -1){
-			throw new Error('Invalid signal: ' + signal + '. Signal not defined by observable target');
-		}
 	}
 
 	/**
@@ -209,9 +206,14 @@ var Observable = (function(){
 	 * @private
 	 */
 	function _signal(target, stream, signal, data){
+		// Get all of the delegates for the specific signal
 		var delegates = target._subs[signal] || [];
+
+		// Determine if the signal is synchronous or not. Sync by default
+		var emitter	= target._signals[signal].async ? _emitAsync : _emitSync;
+
 		delegates.forEach(function(delegate){
-			_emitSync(stream, data, delegate);		
+			emitter(stream, data, delegate);		
 		});
 	}
 
@@ -230,6 +232,20 @@ var Observable = (function(){
 		if('function' === typeof listener){
 			listener(data);
 		}
+	}
+
+	/**
+	 * Emits a single event asynchronously
+	 *
+	 * @param stream    {string}    Signal stream 
+	 * @param data      {object}    Signal data
+	 * @param delegate  {object}    Delegate target
+	 *
+	 * @private
+	 */
+	function _emitAsync(stream, data, delegate){
+		// Runs a synchronous call in a different execution stack immediately
+		setTimeout(_emitSync.bind(null, stream, data, delegate), 0);
 	}
 
 	return self;

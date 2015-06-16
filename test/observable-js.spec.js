@@ -75,20 +75,11 @@ describe('Observable-JS', function(){
 	});
 
 	it('Tests expected errors from an observer', function(){
-		var source = Observable.create({}, ['data']);
+		var source = Observable.create({}, { data : {}});
 		var delegate = {};
 
-		expect(function(){return source.subscribe('fail');}).toThrow();
-		expect(function(){return source.subscribe(123);}).toThrow();
-		
-		// By removing the subscribers from the source it is not considered
-		// a source object any more
-		var sigs = source['_signals'];
-		delete source['_signals'];
-		
-		expect(function(){return source.subscribe('data');}).toThrow();
-		source['_signals'] = sigs;
-		expect(source.subscribe('data', delegate)).toEqual(delegate);
+		expect(function(){return source.subscribe('pass');}).not.toThrow();
+		expect(function(){return source.subscribe(123);}).toThrow();		
 
 	});
 
