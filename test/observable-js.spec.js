@@ -83,4 +83,28 @@ describe('Observable-JS', function(){
 
 	});
 
+	it('Tests async signals', function(){
+		var source = Observable.create({}, { data : {async : true}});
+		var expected = [], actual = [];
+
+		source.subscribe('data', {
+			onNext : function(data){
+				actual.push(data.value);
+			}
+		});
+
+		for(var i = 0; i < 100; i++){
+			expected.push(i);
+			setTimeout(function(){
+				source.signal(Observable.NEXT, 'data', {value : i});
+			}, i);
+		}
+
+		// Wait at least 300ms before checking the output so that all async events
+		// have completed
+		setTimeout(function(){
+			expect(actual).toEqual(expected);
+		}, 300);
+	});
+
 });
