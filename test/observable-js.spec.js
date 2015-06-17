@@ -1,8 +1,11 @@
+/* global Observable */
+
 /**
  * Jasmine test specification for Observable-JS
  */ 
 describe('Observable-JS', function(){
-	
+	'use strict';
+
 	var clock = {
 		count	: 0,
 		tick	: function(){
@@ -79,7 +82,6 @@ describe('Observable-JS', function(){
 
 	it('Tests expected errors from an observer', function(){
 		var source = Observable.create({}, { data : {}});
-		var delegate = {};
 
 		expect(function(){return source.subscribe('pass');}).not.toThrow();
 		expect(function(){return source.subscribe(123);}).toThrow();		
@@ -97,6 +99,9 @@ describe('Observable-JS', function(){
 	it('Tests async signals', function(){
 		var source = Observable.create({}, { data : {async : true}});
 		var expected = [], actual = [];
+		var signal = function(x){
+			source.signal(Observable.NEXT, 'data', {value : x});
+		};
 
 		source.subscribe('data', {
 			onNext : function(data){
@@ -106,9 +111,7 @@ describe('Observable-JS', function(){
 
 		for(var i = 0; i < 100; i++){
 			expected.push(i);
-			setTimeout(function(){
-				SOURCE.signal(Observable.NEXT, 'data', {value : i});
-			}, i);
+			setTimeout(signal.bind(null, i), i);
 		}
 
 		// Wait at least 300ms before checking the output so that all async events

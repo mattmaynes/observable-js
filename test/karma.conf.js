@@ -2,6 +2,8 @@
  * Test Configuration for Observable-JS
  */
 module.exports = function(config){
+	'use strict';
+
 	config.set({
 		// The project root path. All file paths are relative to this path
 		basePath		: '../',

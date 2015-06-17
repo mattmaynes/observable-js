@@ -1,3 +1,5 @@
+/* exported Observable */
+
 /*
 The MIT License (MIT)
 
