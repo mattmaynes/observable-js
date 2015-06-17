@@ -132,6 +132,37 @@ var Observable = (function(){
 			this._subs = {};
 		};
 
+
+		/**
+		 * Registers a signal with the target obeservable applying the given
+		 * options. The available options are listed below. If the signal 
+		 * already exists then the options will be applied to the curent
+		 * signal.
+		 *
+		 * @param signal	{string} The name of the signal to register
+		 * @param options	{object} Avaialable options:
+		 * async {boolean} If this signal should be executed asynchronously
+		 * @end
+		 *
+		 * @return The signal object
+		 */
+		target.register = function(signal, options){
+
+		};
+
+
+		/**
+		 * Removes the given signal from this object. Returns if the signal
+		 * existed and was removed or not
+		 *
+		 * @param signal {string} The signal to remove
+		 *
+		 * @return {boolean} If the signal was removed
+		 */
+		target.unregister = function(signal){
+			
+		};
+
 		/**
 		 * Sends a signal to all listeners for the given stream and observation
 		 *
