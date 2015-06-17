@@ -96,6 +96,22 @@ describe('Observable-JS', function(){
 		expect(function(){return source.signal(Observable.NEXT, 'data');}).toThrow();
 	});
 
+	it('Tests registering a new signal to an object', function(){
+		var source = Observable.create({});
+		var signal = source.register('data');
+		signal.async = true;
+
+		expect(source._signals.data.async).toBe(true);
+
+		expect(function(){return source.register(123);}).toThrow();
+
+
+		delete source._subs;
+		expect(function(){return source.register('hello');}).toThrow();
+		delete source._signals;
+		expect(function(){return source.register('goodbye');}).toThrow();
+	});
+
 	it('Tests async signals', function(){
 		var source = Observable.create({}, { data : {async : true}});
 		var expected = [], actual = [];
