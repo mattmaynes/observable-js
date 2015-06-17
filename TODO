@@ -1,6 +1,3 @@
 #TODO
-- Add method for dynamically declaring signals (register)
-- Add a reciprocal function for register (unregister)
-- Add _checkStream function
 - Add working examples of observable code.
 - Add performance profile to determine overhead of observable-js

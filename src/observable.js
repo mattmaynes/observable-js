@@ -147,20 +147,29 @@ var Observable = (function(){
 		 * @return The signal object
 		 */
 		target.register = function(signal, options){
-
+			_checkTarget(this);
+			_checkSignal(this, signal);
+			
+			this._signals[signal] = _extend(
+					this._signals[signal] || {}, 
+					options	|| {}
+					);
+			return this._signals[signal];
 		};
 
 
 		/**
 		 * Removes the given signal from this object. Returns if the signal
-		 * existed and was removed or not
+		 * was removed successfully
 		 *
 		 * @param signal {string} The signal to remove
 		 *
-		 * @return {boolean} If the signal was removed
+		 * @return {boolean} If the unregister was successful
 		 */
 		target.unregister = function(signal){
-			
+			_checkTarget(this);
+			_checkSignal(this, signal);
+			return delete this._signals[signal];
 		};
 
 		/**
@@ -320,6 +329,22 @@ var Observable = (function(){
 	function _emitAsync(stream, data, delegate){
 		// Runs a synchronous call in a different execution stack immediately
 		setTimeout(_emitSync.bind(null, stream, data, delegate), 0);
+	}
+
+	/**
+	 * Extends the base object to include all values from the 
+	 * extension. Any existing properties are overwritten
+	 *
+	 * @param base	{object} Base object to extend
+	 * @param ext	{object} Extension to add to the base
+	 *
+	 * @return {object} The extended object
+	 */
+	function _extend(base, ext){
+		for(var key in ext){
+			base[key] = ext[key];
+		}
+		return base;
 	}
 
 	return self;
