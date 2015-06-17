@@ -81,24 +81,29 @@ var Observable = (function(){
 		 * @throws error if this object is not observable
 		 */
 		target.unsubscribe = function(delegate){
-			var index;
+			var index, signal;
 			_checkTarget(this);
 
-			if(!delegate){
-				this._subs = {};
-				return true;
-			}
-			if(!delegate._signals)
+			if(!delegate || !delegate._signals){
 				return false;
-			for(var key in delegate._signals){
-				key=delegate._signals[key];
-				index = this._subs[key].indexOf(delegate);
+			}
+
+			for(var i in delegate._signals){
+				signal = delegate._signals[i];
+				index  = signal in this._subs ? this._subs[signal].indexOf(delegate) : -1;
 				if(index >= 0){
-					this._subs[key].splice(index, 1);
+					this._subs[signal].splice(index, 1);
 					return true;
 				}
 			}
 			return false;
+		};
+
+		/**
+		 * Unsubscribes all listeners from this observable object
+		 */
+		target.unsubscribeAll = function(){
+			this._subs = {};
 		};
 
 		/**
@@ -188,17 +193,22 @@ var Observable = (function(){
 	 * @private
 	 */
 	function _addSub(target, signal, delegate){
+		// If there are already signals in this delegate then add a new one
 		if(delegate._singals){
 			delegate._signals.push(signal);
-		}else{
-			delegate._signals=[signal];
 		}
+		else {
+			delegate._signals = [signal];
+		}
+
+		// If there are no signals then add a new one
 		if(target._subs[signal]){
 			target._subs[signal].push(delegate);
 		}
 		else {
 			target._subs[signal] = [delegate];
 		}
+
 		return delegate;
 	}
 	

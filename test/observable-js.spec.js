@@ -71,7 +71,9 @@ describe('Observable-JS', function(){
 
 	it('Tests unsubscribing from an observer before subscribing', function(){
 		expect(clock.unsubscribe({})).toBeFalsy();
-		expect(clock.unsubscribe()).toBeTruthy();
+		expect(clock.unsubscribe()).toBeFalsy();
+		expect(clock.unsubscribe({ _signals: ['tick']})).toBeFalsy();
+		expect(clock.unsubscribe({ _signals: ['none']})).toBeFalsy();
 	});
 
 	it('Tests expected errors from an observer', function(){
@@ -96,7 +98,7 @@ describe('Observable-JS', function(){
 		for(var i = 0; i < 100; i++){
 			expected.push(i);
 			setTimeout(function(){
-				source.signal(Observable.NEXT, 'data', {value : i});
+				SOURCE.signal(Observable.NEXT, 'data', {value : i});
 			}, i);
 		}
 
