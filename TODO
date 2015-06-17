@@ -1,12 +1,6 @@
 #TODO
 - Add method for dynamically declaring signals (register)
 - Add a reciprocal function for register (unregister)
-- Add an unsubscribeAll function
-- Add unregisterAll
 - Add _checkStream function
-- Add state to signals. This will require changing them from strings into 
-	objects. Each key in the signals object will be the identifier. Each
-	signal will have the option to be sync or async. There may be more options
-	in the future.
 - Add working examples of observable code.
 - Add performance profile to determine overhead of observable-js
