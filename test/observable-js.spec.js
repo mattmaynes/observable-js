@@ -86,6 +86,14 @@ describe('Observable-JS', function(){
 
 	});
 
+	it('Tests target validation before signaling', function(){
+		var source = Observable.create({});
+		delete source._subs;
+		expect(function(){return source.signal(Observable.NEXT, 'data');}).toThrow();
+		delete source._signals;
+		expect(function(){return source.signal(Observable.NEXT, 'data');}).toThrow();
+	});
+
 	it('Tests async signals', function(){
 		var source = Observable.create({}, { data : {async : true}});
 		var expected = [], actual = [];
