@@ -29,6 +29,7 @@ describe('Observable-JS', function(){
 
 		clock.signal(Observable.NEXT, 'tick', { count : clock.tick() });
 		clock.signal(Observable.ERROR, 'tick', { message : 'Error!' });
+		clock.signal(Observable.NEXT, 'tock', { message : 'Never Used'});
 		expect(count).toEqual(clock.count);
 		expect(message).toEqual('Error!');
 	});
