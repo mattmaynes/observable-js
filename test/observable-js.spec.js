@@ -97,7 +97,7 @@ describe('Observable-JS', function(){
 	});
 
 	it('Tests registering a new signal to an object', function(){
-		var source = Observable.create({});
+		var source = Observable.create();
 		var signal = source.register('data');
 		signal.async = true;
 
@@ -110,6 +110,16 @@ describe('Observable-JS', function(){
 		expect(function(){return source.register('hello');}).toThrow();
 		delete source._signals;
 		expect(function(){return source.register('goodbye');}).toThrow();
+	});
+
+	it('Tests unregistering a signal from an object', function(){
+		var source = Observable.create();
+		var signal = source.register('data');
+		
+		expect(source._signals.data).toBeDefined();
+		expect(source.unregister('data')).toBeTruthy();
+		expect(source._signals.data).toBeUndefined();
+
 	});
 
 	it('Tests async signals', function(){
