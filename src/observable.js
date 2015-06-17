@@ -94,7 +94,7 @@ var Observable = (function(){
 			if(!delegate._signals)
 				return false;
 			for(var key in delegate._signals){
-				key=delegate._signals[key]
+				key=delegate._signals[key];
 				index = this._subs[key].indexOf(delegate);
 				if(index >= 0){
 					this._subs[key].splice(index, 1);
@@ -192,9 +192,9 @@ var Observable = (function(){
 	 */
 	function _addSub(target, signal, delegate){
 		if(delegate._singals){
-			delegate._signals.push(signal)
+			delegate._signals.push(signal);
 		}else{
-			delegate._signals=[signal]
+			delegate._signals=[signal];
 		}
 		if(target._subs[signal]){
 			target._subs[signal].push(delegate);
