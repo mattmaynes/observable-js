@@ -1,7 +1,8 @@
 #Observable-JS
 Observable allows objects to define a set of state changes that can be 
 observed. This provides a nice machanism for applying the subscriber design 
-pattern to a JavaScript project
+pattern to a JavaScript project. This is very similar to EventEmitter in 
+Node.js except it is brower ready.
 
 ##Observables
 Each observable event in an object triggers three separate functions:
