@@ -23,7 +23,7 @@ module.exports = function(config){
 			dir: 'build/reports/coverage',
 			reporters: [
 				{ type : 'text' },
-				{ type : 'lcov', file : 'lcov.info'}
+				{ type : 'lcov', subdir : '.', file : 'lcov.info'}
 			]
 		},
 		frameworks		: ['jasmine'],
