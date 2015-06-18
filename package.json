@@ -1,0 +1,29 @@
+{
+	"name"			: "observable",
+	"main"			: "Observable",
+	"version"		: "0.1.1",
+	"description"	: "An observable decorator for Javascript",
+	"homepage"		: "https://github.com/mattmaynes/observable-js",
+	"bugs"			: {
+		"url" : "https://github.com/mattmaynes/observable-js/issues"
+	},
+	"license"		: "MIT",
+	"contributors"	: [
+		"Matthew Maynes",
+		"Jeremy Dunsmore"
+	],
+	"repository" : {
+		"type"	: "git",
+		"url"	: "https://github.com/mattmaynes/observable-js.git"
+	},
+	"devDependencies" : {
+		"karma"						: "~0.12",
+		"karma-jasmine"				: "~0.2",
+		"karma-coverage"			: "~0.4",
+		"karma-nested-reporter"		: "~0.1",
+		"karma-phantomjs-launcher"	: "~0.2"
+	},
+	"scripts" : {
+		"test" : "./node_modules/.bin/karma start --signle-run --browsers PhantomJS"
+	}
+}
