@@ -10,7 +10,7 @@ module.exports = function(config){
 		files			: ['test/patch/*.js', 'src/*.js', 'test/*.spec.js'],
 		plugins			: [
 			'karma-jasmine', 
-			'karma-coverage', 
+			'karma-coverage',
 			'karma-nested-reporter', 
 			'karma-phantomjs-launcher'
 		],
@@ -20,7 +20,11 @@ module.exports = function(config){
 			'coverage'
 		],
 		coverageReporter: {
-			type : 'text'
+			dir: 'build/reports/coverage',
+			reporters: [
+				{ type : 'text' },
+				{ type : 'lcov', file : 'lcov.info'}
+			]
 		},
 		frameworks		: ['jasmine'],
 		port			: 9876,
