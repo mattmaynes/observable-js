@@ -1,3 +1,5 @@
+![](https://travis-ci.org/mattmaynes/observable-js.svg)
+
 #Observable-JS
 Observable allows objects to define a set of state changes that can be 
 observed. This provides a nice machanism for applying the subscriber design 
