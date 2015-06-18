@@ -24,6 +24,6 @@
 		"karma-phantomjs-launcher"	: "~0.2"
 	},
 	"scripts" : {
-		"test" : "./node_modules/.bin/karma start --signle-run --browsers PhantomJS"
+		"test" : "./node_modules/.bin/karma start --signle-run --browsers PhantomJS test/karma.conf.js"
 	}
 }
