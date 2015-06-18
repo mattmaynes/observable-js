@@ -113,9 +113,8 @@ var Bar = function(){
 Signals can be have special properties associated with them. To add or update
 a signal, use the `addSignal()`
 
-```
+```JavaScript
 	foo.addSignal('data', { async : true });
-
 ```
 
 Currently there the only option for signals is `async` but there may be more 
