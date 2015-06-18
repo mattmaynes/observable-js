@@ -18,7 +18,7 @@ accepts the same arguments:
 
 A simple handler for an onNext function might look like the following:
 
-```
+```JavaScript
 	function moreData(data, source){
 		console.log(data.message);
 	}
@@ -31,7 +31,7 @@ Observable-JS uses static construction to create an observable object. The
 following makes this object observable with a 'data' 
 event. 
 
-```
+```JavaScript
 	var Foo = function(){
 
 		// Calling create makes 'this' object observable. It adds the 
@@ -47,7 +47,7 @@ To listen to the new data event, an observer must subscribe to the given event.
 A subscription can either explicitly stated in the subscribe line or later by 
 setting it in the subscription object returned by subscribe.
 
-```
+```JavaScript
 	function moreData(data, source){
 		console.log(data.message);
 	}
@@ -75,7 +75,7 @@ setting it in the subscription object returned by subscribe.
 To notify subscribers of events that have occured, the observable object sends a 
 signal with the event data.
 
-```
+```JavaScript
 	// Foo is an observable object. In the constructor we created a 'data' event 
 	// that we can now signal. This function listens for user input and signals 
 	// users of the change in data
@@ -95,7 +95,7 @@ signal with the event data.
 To unsubscribe from an observable object, simply pass the original subscription
 to the unsubscribe function.
 
-```
+```JavaScript
 
 	var Bar = function(){
 		var foo = new Foo();
