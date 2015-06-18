@@ -96,28 +96,28 @@ describe('Observable-JS', function(){
 		expect(function(){return source.signal(Observable.NEXT, 'data');}).toThrow();
 	});
 
-	it('Tests registering a new signal to an object', function(){
+	it('Tests adding a new signal to an object', function(){
 		var source = Observable.create();
-		var signal = source.register('data');
+		var signal = source.addSignal('data');
 		signal.async = true;
 
 		expect(source._signals.data.async).toBe(true);
 
-		expect(function(){return source.register(123);}).toThrow();
+		expect(function(){return source.addSignal(123);}).toThrow();
 
 
 		delete source._subs;
-		expect(function(){return source.register('hello');}).toThrow();
+		expect(function(){return source.addSignal('hello');}).toThrow();
 		delete source._signals;
-		expect(function(){return source.register('goodbye');}).toThrow();
+		expect(function(){return source.addSignal('goodbye');}).toThrow();
 	});
 
-	it('Tests unregistering a signal from an object', function(){
+	it('Tests removing a signal from an object', function(){
 		var source = Observable.create();
-		var signal = source.register('data');
+		var signal = source.addSignal('data');
 		
 		expect(source._signals.data).toBeDefined();
-		expect(source.unregister('data')).toBeTruthy();
+		expect(source.removeSignal('data')).toBeTruthy();
 		expect(source._signals.data).toBeUndefined();
 
 	});

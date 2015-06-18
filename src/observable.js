@@ -134,7 +134,7 @@ var Observable = (function(){
 
 
 		/**
-		 * Registers a signal with the target obeservable applying the given
+		 * Adds a signal with the target obeservable applying the given
 		 * options. The available options are listed below. If the signal 
 		 * already exists then the options will be applied to the curent
 		 * signal.
@@ -146,7 +146,7 @@ var Observable = (function(){
 		 *
 		 * @return The signal object
 		 */
-		target.register = function(signal, options){
+		target.addSignal = function(signal, options){
 			_checkTarget(this);
 			_checkSignal(this, signal);
 			
@@ -166,7 +166,7 @@ var Observable = (function(){
 		 *
 		 * @return {boolean} If the unregister was successful
 		 */
-		target.unregister = function(signal){
+		target.removeSignal = function(signal){
 			_checkTarget(this);
 			_checkSignal(this, signal);
 			return delete this._signals[signal];
