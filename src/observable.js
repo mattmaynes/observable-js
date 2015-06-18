@@ -296,7 +296,7 @@ var Observable = (function(){
 		var emitter	= target._signals[signal].async ? _emitAsync : _emitSync;
 
 		delegates.forEach(function(delegate){
-			emitter(stream, data, delegate);		
+			emitter(target, stream, data, delegate);		
 		});
 	}
 
@@ -304,31 +304,33 @@ var Observable = (function(){
 	 * Emits a single synchronous event on the given event stream sending the 
 	 * defined data object
 	 * 
+	 * @param target	{object}	Observable target
 	 * @param stream	{string}	Signal stream
 	 * @param data		{object}	Signal data
 	 * @param delegate	{object}	Delegate target
 	 *
 	 * @private
 	 */
-	function _emitSync(stream, data, delegate){
+	function _emitSync(target, stream, data, delegate){
 		var listener = delegate[stream];
 		if('function' === typeof listener){
-			listener(data);
+			listener(data, target);
 		}
 	}
 
 	/**
 	 * Emits a single event asynchronously
 	 *
+	 * @param target	{object}	Observable target
 	 * @param stream    {string}    Signal stream 
 	 * @param data      {object}    Signal data
 	 * @param delegate  {object}    Delegate target
 	 *
 	 * @private
 	 */
-	function _emitAsync(stream, data, delegate){
+	function _emitAsync(target, stream, data, delegate){
 		// Runs a synchronous call in a different execution stack immediately
-		setTimeout(_emitSync.bind(null, stream, data, delegate), 0);
+		setTimeout(_emitSync.bind(null, target, stream, data, delegate), 0);
 	}
 
 	/**

@@ -114,7 +114,7 @@ describe('Observable-JS', function(){
 
 	it('Tests removing a signal from an object', function(){
 		var source = Observable.create();
-		var signal = source.addSignal('data');
+		source.addSignal('data');
 		
 		expect(source._signals.data).toBeDefined();
 		expect(source.removeSignal('data')).toBeTruthy();
