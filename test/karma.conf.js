@@ -20,7 +20,7 @@ module.exports = function(config){
 			'coverage'
 		],
 		coverageReporter: {
-			type : 'text-summary'
+			type : 'text'
 		},
 		frameworks		: ['jasmine'],
 		port			: 9876,
