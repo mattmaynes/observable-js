@@ -1,7 +1,7 @@
 {
 	"name"			: "observable",
 	"main"			: "Observable",
-	"version"		: "0.1.1",
+	"version"		: "0.1.2",
 	"description"	: "An observable decorator for Javascript",
 	"homepage"		: "https://github.com/mattmaynes/observable-js",
 	"bugs"			: {
