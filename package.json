@@ -8,8 +8,8 @@
 		"url" : "https://github.com/mattmaynes/observable-js/issues"
 	},
 	"license"		: "MIT",
+	"author"		: "Matthew Maynes <matthewmaynes1@gmail.com>",
 	"contributors"	: [
-		"Matthew Maynes",
 		"Jeremy Dunsmore"
 	],
 	"repository" : {
