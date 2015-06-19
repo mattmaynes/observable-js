@@ -11,3 +11,8 @@
 # Output
 bin
 build
+
+# Libraries
+node_modules/
+lib/
+framework/

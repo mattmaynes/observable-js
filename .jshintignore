@@ -1,0 +1,7 @@
+*~
+*.swp
+build/
+bin/
+lib/
+node_modules/
+
