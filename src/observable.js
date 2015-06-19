@@ -1,5 +1,3 @@
-/* exported Observable */
-
 /*
 The MIT License (MIT)
 
@@ -351,3 +349,8 @@ var Observable = (function(){
 
 	return self;
 })();
+
+// If in node then export observable
+if('undefined' !== typeof module){
+	module.exports = Observable;
+}
