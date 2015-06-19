@@ -16,3 +16,6 @@ build
 node_modules/
 lib/
 framework/
+
+# Logs
+*.log
