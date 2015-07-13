@@ -9,7 +9,7 @@ in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
- 
+
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
 
@@ -24,10 +24,10 @@ THE SOFTWARE.
 
 var Observable = (function(){
 	'use strict';
-	
+
 	/**
-	 * This is the observable object. Observable follows a singleton pattern 
-	 * so this object represents the public API of Observable. There are 3 
+	 * This is the observable object. Observable follows a singleton pattern
+	 * so this object represents the public API of Observable. There are 3
 	 * defined event streams for each available signal.
 	 *
 	 * @type {object}
@@ -41,11 +41,11 @@ var Observable = (function(){
 	/* public */
 
 	/**
-	 * Makes the target object observable. This adds the observable functions 
+	 * Makes the target object observable. This adds the observable functions
 	 * to the target and allows other objects to listen to it.
 	 *
 	 * @param [target]	{object}	The object to make observable
-	 * @param [signals]	{object}	An explicit definition of the events that 
+	 * @param [signals]	{object}	An explicit definition of the events that
 	 * the target will offer. Each signal can have individual properties.
 	 * @end
 	 *
@@ -55,9 +55,9 @@ var Observable = (function(){
 		target = target || {};
 
 		/**
-		 * The target maintains its own state. This holds all of the 
+		 * The target maintains its own state. This holds all of the
 		 * subscribers observing the target.
-		 * 
+		 *
 		 * @type {object}
  		 */
 		target._subs = {};
@@ -68,27 +68,40 @@ var Observable = (function(){
 		 *
 		 * @type {object}
 		 */
-		target._signals = signals || {};
+		target._signals = {};
+
+        // If there are signals provided as an argument then add them
+        // to the set of registered signals. If the data passed in
+        // is an array then make a key for each element.
+        if(signals){
+            if(signals instanceof Array){
+                signals.forEach(function(key){target._signals[key] = {};});
+            }
+            else{
+                target._signals = signals;
+            }
+
+        }
 
 		/**
 		 * Subscribes the given delegate to the signal specified. The delegate
 		 * object is returned and can be modified at a later time.
 		 *
 		 * @param signal		{string}	Signal to observe
-		 * @param [delegate]	{object}	Signal delegate handle onNext, 
+		 * @param [delegate]	{object}	Signal delegate handle onNext,
 		 * onError and onComplete events
 		 * @end
 		 *
 		 * @return {object} The subscription delegate
 		 *
-		 * @throws error if the signal is not defined in this objects 
+		 * @throws error if the signal is not defined in this objects
 		 * observable signals.
 		 * @end
 		 */
 		target.subscribe = function(signal, delegate){
 			_checkTarget(this);
 			_checkSignal(this, signal);
-			
+
 			// If we get here then the signal is valid
 			return _addSub(this, signal, delegate || {});
 		};
@@ -133,7 +146,7 @@ var Observable = (function(){
 
 		/**
 		 * Adds a signal with the target obeservable applying the given
-		 * options. The available options are listed below. If the signal 
+		 * options. The available options are listed below. If the signal
 		 * already exists then the options will be applied to the curent
 		 * signal.
 		 *
@@ -147,9 +160,9 @@ var Observable = (function(){
 		target.addSignal = function(signal, options){
 			_checkTarget(this);
 			_checkSignal(this, signal);
-			
+
 			this._signals[signal] = _extend(
-					this._signals[signal] || {}, 
+					this._signals[signal] || {},
 					options	|| {}
 					);
 			return this._signals[signal];
@@ -175,10 +188,10 @@ var Observable = (function(){
 		 *
 		 * @param stream	{string} Signal stream (i.e. NEXT)
 		 * @param signal	{string} Observation identifier
-		 * @param [data]	{object} A data object to pass to any delegate 
+		 * @param [data]	{object} A data object to pass to any delegate
 		 * functions. The structure of this object arbitrary
 		 * @end
-		 * 
+		 *
 		 *
 		 * @throws error if signal is not a string
 		 *
@@ -200,18 +213,18 @@ var Observable = (function(){
 	};
 
 	/* private */
-	
-	
+
+
 	/**
 	 * Checks if the given target is observable or not
 	 *
 	 * @param target {object} Object to examine
 	 *
-	 * @return {boolean} If the target is observable 
+	 * @return {boolean} If the target is observable
 	 * @private
 	 */
 	function _isObs(target){
-		return target		!== undefined && 
+		return target		!== undefined &&
 			target._signals !== undefined &&
 			target._subs	!== undefined;
 	}
@@ -226,13 +239,13 @@ var Observable = (function(){
 	 */
 	function _checkTarget(target){
 		if(!_isObs(target)){
-			throw new Error('Target object is not observable');	
+			throw new Error('Target object is not observable');
 		}
 	}
 
 	/**
 	 * Ensures that the observation specified is within the targets signal set
-	 * 
+	 *
 	 * @param target {object} Validation source
 	 * @param signal {string} Signal to validate
 	 *
@@ -246,9 +259,9 @@ var Observable = (function(){
 	}
 
 	/**
-	 * Adds a subscription to the target object. If there is no existing 
+	 * Adds a subscription to the target object. If there is no existing
 	 * subscription for the given signal then one is added
-	 * 
+	 *
 	 * @param target	{object}	Observable target
 	 * @param signal	{string}	Observable signal
 	 * @param delegate	{object}	Signal delegate
@@ -275,7 +288,7 @@ var Observable = (function(){
 
 		return delegate;
 	}
-	
+
 	/**
 	 * Signals the delegates of the target object on the given event stream
 	 *
@@ -283,7 +296,7 @@ var Observable = (function(){
 	 * @param stream	{string}	Signal stream
 	 * @param signal	{string}	Observable signal
 	 * @param data		{object}	Signal data
-	 * 
+	 *
 	 * @private
 	 */
 	function _signal(target, stream, signal, data){
@@ -294,14 +307,14 @@ var Observable = (function(){
 		var emitter	= target._signals[signal].async ? _emitAsync : _emitSync;
 
 		delegates.forEach(function(delegate){
-			emitter(target, stream, data, delegate);		
+			emitter(target, stream, data, delegate);
 		});
 	}
 
 	/**
-	 * Emits a single synchronous event on the given event stream sending the 
+	 * Emits a single synchronous event on the given event stream sending the
 	 * defined data object
-	 * 
+	 *
 	 * @param target	{object}	Observable target
 	 * @param stream	{string}	Signal stream
 	 * @param data		{object}	Signal data
@@ -320,7 +333,7 @@ var Observable = (function(){
 	 * Emits a single event asynchronously
 	 *
 	 * @param target	{object}	Observable target
-	 * @param stream    {string}    Signal stream 
+	 * @param stream    {string}    Signal stream
 	 * @param data      {object}    Signal data
 	 * @param delegate  {object}    Delegate target
 	 *
@@ -332,7 +345,7 @@ var Observable = (function(){
 	}
 
 	/**
-	 * Extends the base object to include all values from the 
+	 * Extends the base object to include all values from the
 	 * extension. Any existing properties are overwritten
 	 *
 	 * @param base	{object} Base object to extend
