@@ -9,21 +9,22 @@ module.exports = function(config){
 		basePath		: '../',
 		files			: ['test/patch/*.js', 'src/*.js', 'test/*.spec.js'],
 		plugins			: [
-			'karma-jasmine', 
+			'karma-jasmine',
 			'karma-coverage',
-			'karma-nested-reporter', 
+			'karma-nested-reporter',
 			'karma-phantomjs-launcher'
 		],
 		browsers		: ['PhantomJS'],
-		reporters		: [ 
-			'nested', 
+		reporters		: [
+			'nested',
 			'coverage'
 		],
 		coverageReporter: {
 			dir: 'build/reports/coverage',
 			reporters: [
 				{ type : 'text' },
-				{ type : 'lcov', subdir : '.', file : 'lcov.info'}
+				{ type : 'lcov', subdir : '.', file : 'lcov.info'},
+                { type : 'html', subdir : '.'}
 			]
 		},
 		frameworks		: ['jasmine'],

@@ -2,23 +2,46 @@
 
 /**
  * Jasmine test specification for Observable-JS
- */ 
+ */
 describe('Observable-JS', function(){
 	'use strict';
 
-	var clock = {
-		count	: 0,
-		tick	: function(){
-			return ++this.count;
-		}
-	};
-	
+	var clock;
+
+    beforeEach(function(){
+        clock = {
+		    count	: 0,
+		    tick	: function(){
+			    return ++this.count;
+		    }
+	    };
+
+        Observable.create(clock);
+    });
+
 	it('Tests creating an observable object', function(){
-		Observable.create(clock);
 		expect(clock.subscribe).toBeDefined();
 		expect(clock.unsubscribe).toBeDefined();
 		expect(clock.signal).toBeDefined();
 	});
+
+    it('Tests creating an observable object with keys', function(){
+        var foo = {}, bar = {};
+        Observable.create(foo, ['a', 'b', 'c']);
+
+        expect(foo._signals).toEqual({
+            a : {},
+            b : {},
+            c : {}
+        });
+
+        Observable.create(bar, { a : { async : true }, b : {} });
+        expect(bar._signals).toEqual({
+            a : { async : true },
+            b : {}
+        });
+
+    });
 
 	it('Tests subscribing to an observable object', function(){
 		var count = 0, message = '';
@@ -37,11 +60,26 @@ describe('Observable-JS', function(){
 		expect(message).toEqual('Error!');
 	});
 
+    it('Tests subscribing to different events with the same observer', function(){
+        var count = 0;
+        var listener = clock.subscribe('tick');
+        listener.onNext = function(tick){
+            count = tick.count;
+        };
+
+        clock.subscribe('tock', listener);
+
+        clock.signal(Observable.NEXT, 'tick', { count : clock.tick() });
+        expect(count).toEqual(clock.count);
+        clock.signal(Observable.NEXT, 'tock', { count : 100 });
+        expect(count).toEqual(100);
+    });
+
 	it('Tests signaling using different streams', function(){
 		var count = 0, message = '', complete = false;
-		var	listener = clock.subscribe('tock', { 
-			onNext: function(tick){ 
-				count = tick.count; 
+		var	listener = clock.subscribe('tock', {
+		onNext: function(tick){
+				count = tick.count;
 			}
 		});
 		listener.onError = function(error){
@@ -80,11 +118,18 @@ describe('Observable-JS', function(){
 		expect(clock.unsubscribe({ _signals: ['none']})).toBeFalsy();
 	});
 
+
+    it('Tests unsubscribing all observers from an observable', function(){
+        clock.subscribe('tick');
+        clock.unsubscribeAll();
+        expect(clock._subs).toEqual({});
+    });
+
 	it('Tests expected errors from an observer', function(){
 		var source = Observable.create({}, { data : {}});
 
 		expect(function(){return source.subscribe('pass');}).not.toThrow();
-		expect(function(){return source.subscribe(123);}).toThrow();		
+		expect(function(){return source.subscribe(123);}).toThrow();
 
 	});
 
@@ -115,7 +160,7 @@ describe('Observable-JS', function(){
 	it('Tests removing a signal from an object', function(){
 		var source = Observable.create();
 		source.addSignal('data');
-		
+
 		expect(source._signals.data).toBeDefined();
 		expect(source.removeSignal('data')).toBeTruthy();
 		expect(source._signals.data).toBeUndefined();

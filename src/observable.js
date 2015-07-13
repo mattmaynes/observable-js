@@ -78,7 +78,7 @@ var Observable = (function(){
                 signals.forEach(function(key){target._signals[key] = {};});
             }
             else{
-                target._signals = signals;
+                _extend(target._signals, signals);
             }
 
         }
@@ -271,7 +271,7 @@ var Observable = (function(){
 	 */
 	function _addSub(target, signal, delegate){
 		// If there are already signals in this delegate then add a new one
-		if(delegate._singals){
+		if(delegate._signals){
 			delegate._signals.push(signal);
 		}
 		else {
