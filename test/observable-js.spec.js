@@ -167,7 +167,7 @@ describe('Observable-JS', function(){
 
 	});
 
-	it('Tests async signals', function(){
+	it('Tests async signals', function(done){
 		var source = Observable.create({}, { data : {async : true}});
 		var expected = [], actual = [];
 		var signal = function(x){
@@ -189,7 +189,18 @@ describe('Observable-JS', function(){
 		// have completed
 		setTimeout(function(){
 			expect(actual).toEqual(expected);
+            done();
 		}, 300);
 	});
+
+    it('Tests subscribing using a function', function(){
+        var source = Observable.create({}, ['data']);
+        var data = 'abc123';
+        source.subscribe('data', function(){
+            expect(data).toBe(data);
+        });
+
+        source.signal(Observable.NEXT, 'data', data);
+    });
 
 });

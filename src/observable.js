@@ -206,7 +206,7 @@ var Observable = (function(){
 
 			// Ensure that the signal exist before emitting it
 			this._signals[signal] = this._signals[signal] || {};
-			_signal(this, stream, signal, data || {});
+			_signal(this, stream, signal, typeof data == 'undefined' ? {} : data);
 		};
 
 		return target;
@@ -270,6 +270,13 @@ var Observable = (function(){
 	 * @private
 	 */
 	function _addSub(target, signal, delegate){
+
+        // If the delegate is a function then put it in the
+        // onNext channel of the delegate
+        if(typeof delegate === 'function'){
+            delegate = { onNext : delegate };
+        }
+
 		// If there are already signals in this delegate then add a new one
 		if(delegate._signals){
 			delegate._signals.push(signal);
