@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/mattmaynes/observable-js.svg)](https://travis-ci.org/mattmaynes/observable-js)
 [![Coverage Status](https://coveralls.io/repos/mattmaynes/observable-js/badge.svg?branch=master)](https://coveralls.io/r/mattmaynes/observable-js?branch=master)
+[![Code Climate](https://codeclimate.com/github/mattmaynes/observable-js/badges/gpa.svg)](https://codeclimate.com/github/mattmaynes/observable-js)
 
 Observable allows objects to define a set of state changes that can be 
 observed. This provides a nice mechanism for applying the subscriber design 
