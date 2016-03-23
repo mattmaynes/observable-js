@@ -1,17 +1,21 @@
-#Observable-JS [![Build Status](https://travis-ci.org/mattmaynes/observable-js.svg)](https://travis-ci.org/mattmaynes/observable-js) [![Coverage Status](https://coveralls.io/repos/mattmaynes/observable-js/badge.svg?branch=master)](https://coveralls.io/r/mattmaynes/observable-js?branch=master)
-Observable allows objects to define a set of state changes that can be 
-observed. This provides a nice machanism for applying the subscriber design 
-pattern to a JavaScript project. This is very similar to EventEmitter in 
-Node.js except it is brower ready.
+# Observable-JS 
 
-##Observables
+[![Build Status](https://travis-ci.org/mattmaynes/observable-js.svg)](https://travis-ci.org/mattmaynes/observable-js)
+[![Coverage Status](https://coveralls.io/repos/mattmaynes/observable-js/badge.svg?branch=master)](https://coveralls.io/r/mattmaynes/observable-js?branch=master)
+
+Observable allows objects to define a set of state changes that can be 
+observed. This provides a nice mechanism for applying the subscriber design 
+pattern to a JavaScript project. This is very similar to EventEmitter in 
+Node.js except it is browser ready.
+
+## Observables
 Each observable event in an object triggers three separate functions:
 - onNext
 - onError
 - onComplete
 
 
-These functions can be called indepenently of one another. Each function 
+These functions can be called independently of one another. Each function 
 accepts the same arguments:
 - data
 - source
@@ -24,9 +28,9 @@ function moreData(data, source){
 }
 ```
 
-##Examples
+## Examples
 
-####Initialization
+#### Initialization
 Observable-JS uses static construction to create an observable object. The 
 following makes this object observable with a 'data' 
 event. 
@@ -42,7 +46,7 @@ var Foo = function(){
 };
 ```
 
-####Subscription
+#### Subscription
 To listen to the new data event, an observer must subscribe to the given event.
 A subscription can either explicitly stated in the subscribe line or later by 
 setting it in the subscription object returned by subscribe.
@@ -69,7 +73,7 @@ var Bar = function(){
 };
 ```
 
-####Signalling
+#### Signalling
 To notify subscribers of events that have occured, the observable object sends a 
 signal with the event data.
 
@@ -89,7 +93,7 @@ Foo.prototype.onUserInput = function(event){
 };
 ```
 
-####Unsubscribing
+#### Unsubscribing
 To unsubscribe from an observable object, simply pass the original subscription
 to the unsubscribe function.
 
@@ -109,7 +113,7 @@ var Bar = function(){
 	
 ```
 
-####Signals
+#### Signals
 Signals can be have special properties associated with them. To add or update
 a signal, use the `addSignal()`
 
@@ -121,7 +125,7 @@ Currently there the only option for signals is `async` but there may be more
 in the future
 
 
-##License
+## License
 
 The MIT License (MIT)
 
