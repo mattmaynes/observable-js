@@ -1,7 +1,7 @@
 {
     "name"			: "observable",
     "main"			: "Observable",
-    "version"		: "1.0.0",
+    "version"		: "1.0.1",
     "description"	: "An observable decorator for Javascript",
     "homepage"		: "https://github.com/mattmaynes/observable-js",
     "bugs"			: {
@@ -18,7 +18,7 @@
     },
     "devDependencies" : {
         "jsdoc"                     : "~3.4",
-        "phantomjs"                 : "~1.9",
+        "phantomjs-prebuilt"        : "latest",
         "karma"						: "~0.12",
         "karma-jasmine"				: "~0.2",
         "karma-coverage"			: "~0.4",
