@@ -41,6 +41,38 @@ var Observable = (function () {
     /* public */
 
     /**
+     * Forwards a signal from one target to another.
+     *
+     * @param origin    {Observable}    Observable origin to forward signals from
+     * @param target    {Observable}    Observable target to attach delegates to
+     * @param signal    {string}        ID of signal to forward
+     * @param transform {function}      Transformation of stream data
+     */
+    self.forward = function (origin, target, signal, transform) {
+        _checkTarget(origin);
+        _checkTarget(target);
+        signal = 'string' === typeof signal ? { from : signal, to : signal } : signal;
+
+        origin.subscribe(signal.from, _forward(signal.to, target, transform));
+        return target;
+    };
+
+    /**
+     * Forwards all signals from the origin to the new target. The given transformation
+     * function will be applied to all data that is signalled
+     *
+     * @param origin    {Observable}    Observable origin to forward signals from
+     * @param target    {Observable}    Observable target to attach delegates to
+     * @param transform {function}      Transformation of stream data
+     */
+    self.forwardAll = function (origin, target, transform) {
+        for (var signal in origin._signals) {
+            self.forward(origin, target, signal, transform);
+        }
+        return target;
+    };
+
+    /**
      * Makes the target object observable. This adds the observable functions
      * to the target and allows other objects to listen to it.
      *
@@ -60,7 +92,7 @@ var Observable = (function () {
          *
          * @type {object}
          */
-        target._subs = {};
+        target._subs = target._subs || {};
 
         /**
          * Maintains all of the signals for this target and any properties
@@ -68,7 +100,7 @@ var Observable = (function () {
          *
          * @type {object}
          */
-        target._signals = {};
+        target._signals = target._signals || {};
 
         // If there are signals provided as an argument then add them
         // to the set of registered signals. If the data passed in
@@ -80,7 +112,6 @@ var Observable = (function () {
             else{
                 _extend(target._signals, signals);
             }
-
         }
 
         /**
@@ -165,6 +196,7 @@ var Observable = (function () {
                 this._signals[signal] || {},
                 options	|| {}
             );
+            this._subs[signal] = this._subs[signal] || [];
             return this._signals[signal];
         };
 
@@ -367,8 +399,31 @@ var Observable = (function () {
         return base;
     }
 
+    /**
+     * If the input is undefined then returns the identity function.
+     * Otherwise, returns the input
+     *
+     * @param transform {function} Function to check
+     * @return {function} Identity or transform
+     */
+    function _transform (transform) {
+        if (!transform) {
+            return function (x) { return x; };
+        }
+        return transform;
+    }
+
+    function _forward (signal, target, transform) {
+        transform = _transform(transform);
+        return {
+            onNext      : function (data) { target.signal(self.NEXT, signal, transform(data)); },
+            onError     : function (data) { target.signal(self.ERROR, signal, transform(data)); },
+            onComplete  : function (data) { target.signal(self.COMPLETE, signal, transform(data)); }
+        };
+    }
+
     return self;
-})();
+}());
 
 // If in node then export observable
 if ('undefined' !== typeof module) { module.exports = Observable; }
