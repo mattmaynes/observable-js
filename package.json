@@ -19,6 +19,7 @@
     "devDependencies" : {
         "jsdoc"                     : "latest",
         "phantomjs-prebuilt"        : "latest",
+        "jasmine-core"              : "latest",
         "karma"                     : "latest",
         "karma-jasmine"             : "latest",
         "karma-coverage"            : "latest",
