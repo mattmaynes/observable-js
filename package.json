@@ -17,14 +17,14 @@
         "url"	: "https://github.com/mattmaynes/observable-js.git"
     },
     "devDependencies" : {
-        "jsdoc"                     : "~3.4",
+        "jsdoc"                     : "latest",
         "phantomjs-prebuilt"        : "latest",
-        "karma"						: "~0.12",
-        "karma-jasmine"				: "~0.2",
-        "karma-coverage"			: "~0.4",
-        "karma-coveralls"			: "~1.1",
-        "karma-nested-reporter"		: "~0.1",
-        "karma-phantomjs-launcher"	: "~0.2"
+        "karma"                     : "latest",
+        "karma-jasmine"             : "latest",
+        "karma-coverage"            : "latest",
+        "karma-coveralls"           : "latest",
+        "karma-nested-reporter"     : "latest",
+        "karma-phantomjs-launcher"  : "latest"
     },
     "scripts" : {
         "test"		: "./node_modules/.bin/karma start --signle-run --browsers PhantomJS test/karma.conf.js",
